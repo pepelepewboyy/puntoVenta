@@ -26,21 +26,83 @@ public class puntoventa extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        btnInventory = new javax.swing.JButton();
+        btnSales = new javax.swing.JButton();
+        btnReports = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("Hi! Please select the screen that you need:");
+
+        btnInventory.setText("Inventory");
+        btnInventory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Inventory(evt);
+            }
+        });
+
+        btnSales.setText("Sales");
+        btnSales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Sales(evt);
+            }
+        });
+
+        btnReports.setText("Reports");
+        btnReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Reports(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(74, 74, 74)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(btnInventory)
+                        .addGap(40, 40, 40)
+                        .addComponent(btnSales)
+                        .addGap(38, 38, 38)
+                        .addComponent(btnReports)))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addComponent(jLabel1)
+                .addGap(87, 87, 87)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnInventory)
+                    .addComponent(btnSales)
+                    .addComponent(btnReports))
+                .addContainerGap(117, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void Sales(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Sales
+        // TODO add your handling code here:
+        new Sales().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_Sales
+
+    private void Inventory(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Inventory
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Inventory
+
+    private void Reports(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Reports
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Reports
 
     /**
      * @param args the command line arguments
@@ -78,5 +140,9 @@ public class puntoventa extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnInventory;
+    private javax.swing.JButton btnReports;
+    private javax.swing.JButton btnSales;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
