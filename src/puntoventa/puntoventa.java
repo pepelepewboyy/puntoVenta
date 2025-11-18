@@ -98,10 +98,14 @@ public class puntoventa extends javax.swing.JFrame {
 
     private void Inventory(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Inventory
         // TODO add your handling code here:
+        new Inventory().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_Inventory
 
     private void Reports(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Reports
         // TODO add your handling code here:
+        new Reports().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_Reports
 
     /**
