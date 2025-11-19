@@ -115,14 +115,14 @@ public class Inventory extends javax.swing.JFrame {
         btnReturn1.setText("Go to reports");
         btnReturn1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReturn1Return(evt);
+                goReports(evt);
             }
         });
 
         btnSales.setText("Go to sales");
         btnSales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalesReturn(evt);
+                goSales(evt);
             }
         });
 
@@ -257,13 +257,17 @@ public class Inventory extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_Delete
 
-    private void btnReturn1Return(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturn1Return
+    private void goReports(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goReports
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnReturn1Return
+        new Reports().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_goReports
 
-    private void btnSalesReturn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalesReturn
+    private void goSales(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goSales
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnSalesReturn
+        new Sales().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_goSales
 
     /**
      * @param args the command line arguments

@@ -279,7 +279,7 @@
         <Property name="text" type="java.lang.String" value="Go to reports"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReturn1Return"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="goReports"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnSales">
@@ -287,7 +287,7 @@
         <Property name="text" type="java.lang.String" value="Go to sales"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSalesReturn"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="goSales"/>
       </Events>
     </Component>
   </SubComponents>
