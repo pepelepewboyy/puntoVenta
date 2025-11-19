@@ -4,6 +4,10 @@
  */
 package puntoventa;
 
+import java.util.List;
+import java.util.Map;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author imano
@@ -28,7 +32,7 @@ public class Inventory extends javax.swing.JFrame {
 
         btnReturn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblProducts = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -55,7 +59,7 @@ public class Inventory extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblProducts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -66,7 +70,7 @@ public class Inventory extends javax.swing.JFrame {
                 "product_id", "name", "purchase_price", "sale_price", "quantity"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblProducts);
 
         jLabel1.setText("Product ID:");
 
@@ -231,6 +235,18 @@ public class Inventory extends javax.swing.JFrame {
 
     private void Read(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Read
         // TODO add your handling code here:
+         List<Map<String, Object>> datos = bd.leer(configuration, "products");
+        DefaultTableModel model = (DefaultTableModel) tblProducts.getModel();
+        model.setRowCount(0);
+        for (Map<String, Object> fila : datos){
+            model.addRow(new Object[]{
+                fila.get("product_id"),
+                fila.get("name"),
+                fila.get("purchase_price"),
+                fila.get("sale_price"),
+                fila.get("quantity")
+            });
+        }
     }//GEN-LAST:event_Read
 
     private void Update(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update
@@ -298,11 +314,20 @@ public class Inventory extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblProducts;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtPurchasePrice;
     private javax.swing.JTextField txtQuantity;
     private javax.swing.JTextField txtSalePrice;
     // End of variables declaration//GEN-END:variables
+
+    String[] configuration = {"localhost","root","","pos_system"};
+    MySQLGenerico bd = new MySQLGenerico();
+
+    private void Read() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    
 }
