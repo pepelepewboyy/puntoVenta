@@ -27,6 +27,7 @@ public class Sales extends javax.swing.JFrame {
     private void initComponents() {
 
         btnReturn = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -37,6 +38,8 @@ public class Sales extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -45,11 +48,17 @@ public class Sales extends javax.swing.JFrame {
                 .addContainerGap(318, Short.MAX_VALUE)
                 .addComponent(btnReturn)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(156, 156, 156)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(267, Short.MAX_VALUE)
+                .addGap(80, 80, 80)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE)
                 .addComponent(btnReturn)
                 .addContainerGap())
         );
@@ -100,5 +109,6 @@ public class Sales extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReturn;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
