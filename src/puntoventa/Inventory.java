@@ -70,6 +70,11 @@ public class Inventory extends javax.swing.JFrame {
                 "product_id", "name", "purchase_price", "sale_price", "quantity"
             }
         ));
+        tblProducts.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                getData(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblProducts);
 
         jLabel1.setText("Product ID:");
@@ -140,9 +145,7 @@ public class Inventory extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(39, 39, 39))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(1, 1, 1)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
@@ -198,7 +201,7 @@ public class Inventory extends javax.swing.JFrame {
                             .addComponent(jLabel3)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(44, 44, 44)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtSalePrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -208,15 +211,16 @@ public class Inventory extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnReturn)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnCreate)
                         .addComponent(btnRead)
                         .addComponent(btnUpdate)
                         .addComponent(btnDelete))
-                    .addComponent(btnReturn1)
-                    .addComponent(btnSales))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnReturn)
+                        .addComponent(btnReturn1)
+                        .addComponent(btnSales)))
                 .addContainerGap())
         );
 
@@ -268,6 +272,19 @@ public class Inventory extends javax.swing.JFrame {
         new Sales().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_goSales
+
+    private void getData(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_getData
+        // TODO add your handling code here:
+        int fila = tblProducts.getSelectedRow();
+        if (fila>=0){
+            txtID.setText(tblProducts.getValueAt(fila, 0).toString());
+            txtName.setText(tblProducts.getValueAt(fila, 1).toString());
+            txtPurchasePrice.setText(tblProducts.getValueAt(fila, 2).toString());
+            txtSalePrice.setText(tblProducts.getValueAt(fila, 3).toString());
+            txtQuantity.setText(tblProducts.getValueAt(fila, 4).toString());   
+        }
+        
+    }//GEN-LAST:event_getData
 
     /**
      * @param args the command line arguments
