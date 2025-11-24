@@ -4,6 +4,7 @@
  */
 package puntoventa;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
@@ -227,6 +228,22 @@ public class Inventory extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void TableUpdate (){
+                // TODO add your handling code here:
+         List<Map<String, Object>> datos = bd.leer(configuration, "products");
+        DefaultTableModel model = (DefaultTableModel) tblProducts.getModel();
+        model.setRowCount(0);
+        for (Map<String, Object> fila : datos){
+            model.addRow(new Object[]{
+                fila.get("product_id"),
+                fila.get("name"),
+                fila.get("purchase_price"),
+                fila.get("sale_price"),
+                fila.get("quantity")
+            });
+        }
+    }
+    
     private void Return(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Return
         // TODO add your handling code here:
         new puntoventa().setVisible(true);
@@ -255,6 +272,14 @@ public class Inventory extends javax.swing.JFrame {
 
     private void Update(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update
         // TODO add your handling code here:
+        
+       int id = Integer.parseInt(txtID.getText());
+       Map datos = new HashMap();
+       datos.put(campos[1], txtName.getText());
+       datos.put(campos[2], txtPurchasePrice.getText());
+       datos.put(campos[3], txtSalePrice.getText());
+       datos.put(campos[4], txtQuantity.getText());   
+       bd.actualizar(id, datos, configuration, tabla);
     }//GEN-LAST:event_Update
 
     private void Delete(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Delete
@@ -345,6 +370,8 @@ public class Inventory extends javax.swing.JFrame {
 
     String[] configuration = {"localhost","root","","pos_system"};
     MySQLGenerico bd = new MySQLGenerico();
+    String[] campos = {"product_id", "name", "purchase_price", "sale_price", "quantity"};
+    String tabla = "products";
 
     private void Read() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
