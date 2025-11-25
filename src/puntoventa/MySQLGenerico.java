@@ -59,7 +59,6 @@ public class MySQLGenerico {
                 }
                 resultados.add(fila);
             }
-            JOptionPane.showMessageDialog(null, "REGISTROS LEIDOS CORRECTAMENTE");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null,"Error al leer registros\n"+e,"ERROR",JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();

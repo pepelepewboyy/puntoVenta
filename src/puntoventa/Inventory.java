@@ -4,8 +4,10 @@
  */
 package puntoventa;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -19,6 +21,7 @@ public class Inventory extends javax.swing.JFrame {
      */
     public Inventory() {
         initComponents();
+        TableUpdate();
     }
 
     /**
@@ -227,6 +230,32 @@ public class Inventory extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    private void Clean(){
+        txtName.setText("");
+        txtID.setText("");
+        txtPurchasePrice.setText("");
+        txtQuantity.setText("");
+        txtName.setText("");
+        txtSalePrice.setText("");
+    }
+    
+    private void TableUpdate (){
+                // TODO add your handling code here:
+         List<Map<String, Object>> datos = bd.leer(configuration, "products");
+        DefaultTableModel model = (DefaultTableModel) tblProducts.getModel();
+        model.setRowCount(0);
+        for (Map<String, Object> fila : datos){
+            model.addRow(new Object[]{
+                fila.get("id"),
+                fila.get("name"),
+                fila.get("purchase_price"),
+                fila.get("sale_price"),
+                fila.get("quantity")
+            });
+        }
+    }
+    
     private void Return(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Return
         // TODO add your handling code here:
         new puntoventa().setVisible(true);
@@ -235,6 +264,14 @@ public class Inventory extends javax.swing.JFrame {
 
     private void Create(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Create
         // TODO add your handling code here:
+        Map datos = new HashMap();
+        datos.put(campos[0], txtName.getText());
+        datos.put(campos[1], txtPurchasePrice.getText());
+        datos.put(campos[2], txtSalePrice.getText());
+        datos.put(campos[3], txtQuantity.getText());
+        JOptionPane.showMessageDialog(null, bd.crear(datos, configuration, tabla));
+        Clean();
+        TableUpdate();
     }//GEN-LAST:event_Create
 
     private void Read(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Read
@@ -244,7 +281,7 @@ public class Inventory extends javax.swing.JFrame {
         model.setRowCount(0);
         for (Map<String, Object> fila : datos){
             model.addRow(new Object[]{
-                fila.get("product_id"),
+                fila.get("id"),
                 fila.get("name"),
                 fila.get("purchase_price"),
                 fila.get("sale_price"),
@@ -255,10 +292,24 @@ public class Inventory extends javax.swing.JFrame {
 
     private void Update(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update
         // TODO add your handling code here:
+       int id = Integer.parseInt(txtID.getText());
+       Map datos = new HashMap();
+       datos.put(campos[0], txtName.getText());
+       datos.put(campos[1], txtPurchasePrice.getText());
+       datos.put(campos[2], txtSalePrice.getText());
+       datos.put(campos[3], txtQuantity.getText());
+       JOptionPane.showMessageDialog(null, bd.actualizar(id, datos, configuration, tabla));
+       TableUpdate();
+       Clean();
+       
     }//GEN-LAST:event_Update
 
     private void Delete(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Delete
         // TODO add your handling code here:
+        int id=Integer.parseInt(txtID.getText());
+        JOptionPane.showMessageDialog(null, bd.borrar(id, configuration, tabla));
+        Clean();
+        TableUpdate();
     }//GEN-LAST:event_Delete
 
     private void goReports(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goReports
@@ -317,6 +368,7 @@ public class Inventory extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Inventory().setVisible(true);
+                
             }
         });
     }
@@ -345,6 +397,8 @@ public class Inventory extends javax.swing.JFrame {
 
     String[] configuration = {"localhost","root","","pos_system"};
     MySQLGenerico bd = new MySQLGenerico();
+    String[] campos = {"name", "purchase_price", "sale_price", "quantity"};
+    String tabla = "products";
 
     private void Read() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
