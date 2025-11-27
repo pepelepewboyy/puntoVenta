@@ -6,6 +6,10 @@ package puntoventa;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -19,6 +23,7 @@ public class Sales extends javax.swing.JFrame {
     public Sales() {
         initComponents();
         lblDate.setText(GetDate());
+        putItemsCBO();
     }
 
     /**
@@ -42,6 +47,8 @@ public class Sales extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         lblDate = new javax.swing.JLabel();
+        btnInventary = new javax.swing.JButton();
+        btnReports = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -67,10 +74,29 @@ public class Sales extends javax.swing.JFrame {
         lblTotal.setText("$0.00");
 
         jButton1.setText("Buy");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Buy(evt);
+            }
+        });
 
         jLabel4.setText("Date: ");
 
         lblDate.setText("00/00/0000");
+
+        btnInventary.setText("Go to Inventary");
+        btnInventary.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                goInventary(evt);
+            }
+        });
+
+        btnReports.setText("Go to Reports");
+        btnReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                goReports(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -80,14 +106,18 @@ public class Sales extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnReports)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnInventary)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnReturn))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(spinQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(spinQuantity))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(45, 45, 45)
                                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -138,7 +168,10 @@ public class Sales extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
                 .addGap(18, 18, 18)
-                .addComponent(btnReturn)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnReturn)
+                    .addComponent(btnInventary)
+                    .addComponent(btnReports))
                 .addContainerGap())
         );
 
@@ -146,7 +179,14 @@ public class Sales extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     
-    
+    private void putItemsCBO(){
+       List<Map<String, Object>> datos = bd.leer(configuration, tabla);
+       cboProduct.removeAllItems();
+       for (Map<String, Object> fila:datos){
+           String nombre = fila.get("name").toString();
+           cboProduct.addItem(nombre);
+       } 
+    }
     
     
     private String GetDate(){
@@ -164,6 +204,59 @@ public class Sales extends javax.swing.JFrame {
         new puntoventa().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_Return
+
+    private void goInventary(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goInventary
+        // TODO add your handling code here:
+    }//GEN-LAST:event_goInventary
+
+    private void goReports(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goReports
+        // TODO add your handling code here:
+    }//GEN-LAST:event_goReports
+
+    private void Buy(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Buy
+        boolean canIbuy = false;
+        int id = -1;
+        int quantityProduct = 0;
+        List<Map<String, Object>> datos = bd.leer(configuration, tabla);
+        int quantity = (Integer) spinQuantity.getValue();
+        String product = cboProduct.getSelectedItem().toString();
+        if (quantity <=0){
+            JOptionPane.showMessageDialog(
+                null,
+                "Intentas comprar 0 productos o cantidades negativas",
+                "ERROR",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }else{
+        for (Map<String, Object> fila : datos) {
+            String products = fila.get("name").toString();
+            if (products.equals(product)) {
+                id = Integer.parseInt(fila.get("id").toString());
+                quantityProduct = Integer.parseInt(fila.get("quantity").toString());
+                if (quantity > quantityProduct) {
+                    JOptionPane.showMessageDialog(
+                        null,
+                        "Intentas comprar más productos de los disponibles",
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE
+                    );
+                    canIbuy = false;
+                } else {
+                    canIbuy = true;
+                }
+                break;
+            }
+        }
+        }
+        if (canIbuy) {
+            Map<String, Object> dato = new HashMap<>();
+            int newQuantity = quantityProduct - quantity;
+            dato.put(camposProducts[0], newQuantity);
+            bd.actualizar(id, dato, configuration, tabla);
+            JOptionPane.showMessageDialog(null, "Compra registrada correctamente");
+        }
+
+    }//GEN-LAST:event_Buy
 
     /**
      * @param args the command line arguments
@@ -201,6 +294,8 @@ public class Sales extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnInventary;
+    private javax.swing.JButton btnReports;
     private javax.swing.JButton btnReturn;
     private javax.swing.JComboBox<String> cboProduct;
     private javax.swing.JButton jButton1;
@@ -217,5 +312,7 @@ public class Sales extends javax.swing.JFrame {
 
     String[] configuration = {"localhost","root","","pos_system"};
     MySQLGenerico bd = new MySQLGenerico();
+    String[] camposProducts = {"quantity"};
+    String tabla = "products";
     
 }

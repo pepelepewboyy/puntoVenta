@@ -27,15 +27,19 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
+                      <Component id="btnReports" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnInventary" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnReturn" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="spinQuantity" min="-2" max="-2" attributes="0"/>
+                              <Component id="spinQuantity" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
@@ -102,7 +106,11 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jButton1" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="btnReturn" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnReturn" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnInventary" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnReports" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -168,6 +176,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Buy"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Buy"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
@@ -178,6 +189,22 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="00/00/0000"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnInventary">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Go to Inventary"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="goInventary"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnReports">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Go to Reports"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="goReports"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
