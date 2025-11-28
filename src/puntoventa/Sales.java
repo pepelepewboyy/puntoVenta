@@ -220,54 +220,88 @@ public class Sales extends javax.swing.JFrame {
 
     private void goInventary(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goInventary
         // TODO add your handling code here:
+        new Inventory().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_goInventary
 
     private void goReports(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goReports
         // TODO add your handling code here:
+        new Reports().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_goReports
 
     private void Buy(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Buy
-        boolean canIbuy = false;
-        int id = -1;
-        int quantityProduct = 0;
+        boolean canIbuy = false; //BANDERA
+        int productID = 0;
+        int stockQuantity = 0;
+        double total = 0;
+
+        // Leer productos de la BD
         List<Map<String, Object>> datos = bd.leer(configuration, tabla);
-        int quantity = (Integer) spinQuantity.getValue();
-        String product = cboProduct.getSelectedItem().toString();
-        if (quantity <= 0) {
+
+        // Datos seleccionados por el usuario
+        int quantityToBuy = (Integer) spinQuantity.getValue();
+        String productName = cboProduct.getSelectedItem().toString();
+
+        // Validación de cantidad
+        if (quantityToBuy <= 0) {
             JOptionPane.showMessageDialog(
                     null,
                     "Intentas comprar 0 productos o cantidades negativas",
                     "ERROR",
                     JOptionPane.ERROR_MESSAGE
             );
-        } else {
-            for (Map<String, Object> fila : datos) {
-                String products = fila.get("name").toString();
-                if (products.equals(product)) {
-                    id = Integer.parseInt(fila.get("id").toString());
-                    quantityProduct = Integer.parseInt(fila.get("quantity").toString());
-                    if (quantity > quantityProduct) {
-                        JOptionPane.showMessageDialog(
-                                null,
-                                "Intentas comprar más productos de los disponibles",
-                                "ERROR",
-                                JOptionPane.ERROR_MESSAGE
-                        );
-                        canIbuy = false;
-                    } else {
-                        canIbuy = true;
-                    }
-                    break;
+            return;
+        }
+
+        // Buscar el producto en la tabla
+        for (Map<String, Object> fila : datos) {
+            String nameDB = fila.get("name").toString();
+
+            if (nameDB.equals(productName)) {
+                productID = Integer.parseInt(fila.get("id").toString());
+                stockQuantity = Integer.parseInt(fila.get("quantity").toString());
+
+                double price = Double.parseDouble(fila.get("sale_price").toString());
+                total = quantityToBuy * price;
+
+                // Validar existencia
+                if (quantityToBuy > stockQuantity) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Intentas comprar más productos de los disponibles",
+                            "ERROR",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    return;
                 }
+
+                canIbuy = true;
+                break;
             }
         }
-        if (canIbuy) {
-            Map<String, Object> dato = new HashMap<>();
-            int newQuantity = quantityProduct - quantity;
-            dato.put(camposProducts[0], newQuantity);
-            bd.actualizar(id, dato, configuration, tabla);
-            JOptionPane.showMessageDialog(null, "Compra registrada correctamente");
+
+        if (!canIbuy) {
+            JOptionPane.showMessageDialog(null, "Producto no encontrado en BD.");
+            return;
         }
+
+        Map<String, Object> updateProduct = new HashMap<>();
+        int newQuantity = stockQuantity - quantityToBuy;
+        updateProduct.put("quantity", newQuantity);
+        System.out.println("1");
+        bd.actualizar(productID, updateProduct, configuration, "products");
+
+        Map<String, Object> datosSales = new HashMap<>();
+        datosSales.put("sale_date", GetDate());
+        datosSales.put("product_id", productID);
+        datosSales.put("quantity_sold", quantityToBuy);
+        datosSales.put("total", total);
+        System.out.println("2");
+        bd.crear(datosSales, configuration, "sales");
+
+        JOptionPane.showMessageDialog(null, "Compra registrada correctamente");
+
 
     }//GEN-LAST:event_Buy
 
@@ -373,7 +407,7 @@ public class Sales extends javax.swing.JFrame {
 
     String[] configuration = {"localhost", "root", "", "pos_system"};
     MySQLGenerico bd = new MySQLGenerico();
-    String[] camposProducts = {"quantity"};
+    String[] campos = {"sale_id", "product_id", "quantity_sold", "subtotal"};
     String tabla = "products";
 
 }

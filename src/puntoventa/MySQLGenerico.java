@@ -3,12 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package puntoventa;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
+
 /**
  *
  * @author mac
@@ -24,14 +26,26 @@ public class MySQLGenerico {
     // Método para cerrar la conexión y el cursor
     public void cerrar(ResultSet rs, Statement stmt, Connection conn) {
         try {
-            if (rs != null) rs.close();
-        } catch (SQLException e) { e.printStackTrace(); }
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         try {
-            if (stmt != null) stmt.close();
-        } catch (SQLException e) { e.printStackTrace(); }
+            if (stmt != null) {
+                stmt.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         try {
-            if (conn != null) conn.close();
-        } catch (SQLException e) { e.printStackTrace(); }
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // Leer todos los registros de una tabla
@@ -60,7 +74,7 @@ public class MySQLGenerico {
                 resultados.add(fila);
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null,"Error al leer registros\n"+e,"ERROR",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al leer registros\n" + e, "ERROR", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         } finally {
             cerrar(rs, stmt, conn);
@@ -86,8 +100,8 @@ public class MySQLGenerico {
                 pstmt.setObject(index++, valor);
             }
 
-            pstmt.executeUpdate();
-            
+            int executeUpdate = pstmt.executeUpdate();
+
             return "Registro insertado correctamente";
         } catch (SQLException e) {
             e.printStackTrace();
@@ -142,5 +156,66 @@ public class MySQLGenerico {
             cerrar(null, pstmt, conn);
         }
     }
-}
 
+    // Insertar registro
+    public int crearYRetornarID(Map<String, Object> datos, String[] configuracion, String tabla) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = conectar(configuracion);
+
+            // Construir los nombres de columnas y placeholders
+            StringBuilder columnas = new StringBuilder();
+            StringBuilder valores = new StringBuilder();
+
+            for (String key : datos.keySet()) {
+                columnas.append(key).append(",");
+                valores.append("?,");
+            }
+
+            // Quitar coma final
+            columnas.deleteCharAt(columnas.length() - 1);
+            valores.deleteCharAt(valores.length() - 1);
+
+            String sql = "INSERT INTO " + tabla + " (" + columnas + ") VALUES (" + valores + ")";
+            pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            // Asignar valores al PreparedStatement
+            int index = 1;
+            for (Object value : datos.values()) {
+                pstmt.setObject(index++, value);
+            }
+
+            pstmt.executeUpdate();
+
+            // Obtener ID generado
+            rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                return -1; // No se generó ningún ID
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error al insertar y obtener ID: " + e.getMessage());
+            return -1;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+            }
+        }
+    }
+
+}
