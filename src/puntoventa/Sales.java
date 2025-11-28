@@ -289,7 +289,6 @@ public class Sales extends javax.swing.JFrame {
         Map<String, Object> updateProduct = new HashMap<>();
         int newQuantity = stockQuantity - quantityToBuy;
         updateProduct.put("quantity", newQuantity);
-        System.out.println("1");
         bd.actualizar(productID, updateProduct, configuration, "products");
 
         Map<String, Object> datosSales = new HashMap<>();
@@ -297,7 +296,6 @@ public class Sales extends javax.swing.JFrame {
         datosSales.put("product_id", productID);
         datosSales.put("quantity_sold", quantityToBuy);
         datosSales.put("total", total);
-        System.out.println("2");
         bd.crear(datosSales, configuration, "sales");
 
         JOptionPane.showMessageDialog(null, "Compra registrada correctamente");
