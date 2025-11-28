@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
  */
 public class Sales extends javax.swing.JFrame {
 
+    private boolean bloquearEventos = false;
+
     /**
      * Creates new form Sales
      */
@@ -60,10 +62,21 @@ public class Sales extends javax.swing.JFrame {
         });
 
         cboProduct.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboProduct.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                putPrice(evt);
+            }
+        });
 
         jLabel1.setText("Select the product:");
 
         jLabel2.setText("How much/many do u need?");
+
+        spinQuantity.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                TotalPrice(evt);
+            }
+        });
 
         jLabel3.setText("Unit Price:");
 
@@ -105,7 +118,7 @@ public class Sales extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(91, Short.MAX_VALUE)
                         .addComponent(btnReports)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnInventary)
@@ -113,11 +126,7 @@ public class Sales extends javax.swing.JFrame {
                         .addComponent(btnReturn))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(spinQuantity))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(45, 45, 45)
                                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -138,14 +147,18 @@ public class Sales extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 122, Short.MAX_VALUE)))
+                                .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(spinQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(44, Short.MAX_VALUE)
+                .addContainerGap(39, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(lblDate))
@@ -161,7 +174,7 @@ public class Sales extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(spinQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(lblTotal))
@@ -178,27 +191,27 @@ public class Sales extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    private void putItemsCBO(){
-       List<Map<String, Object>> datos = bd.leer(configuration, tabla);
-       cboProduct.removeAllItems();
-       for (Map<String, Object> fila:datos){
-           String nombre = fila.get("name").toString();
-           cboProduct.addItem(nombre);
-       } 
+    private void putItemsCBO() {
+        bloquearEventos = true;
+        List<Map<String, Object>> datos = bd.leer(configuration, tabla);
+        cboProduct.removeAllItems();
+        cboProduct.addItem("SELECCIONE");
+        for (Map<String, Object> fila : datos) {
+            String nombre = fila.get("name").toString();
+            cboProduct.addItem(nombre);
+        }
+        bloquearEventos = false;
     }
-    
-    
-    private String GetDate(){
+
+    private String GetDate() {
         SimpleDateFormat formateador = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         String fechaFormateada = formateador.format(date);
         System.out.println(fechaFormateada);
         return fechaFormateada;
     }
-    
-    
-    
+
+
     private void Return(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Return
         // TODO add your handling code here:
         new puntoventa().setVisible(true);
@@ -220,33 +233,33 @@ public class Sales extends javax.swing.JFrame {
         List<Map<String, Object>> datos = bd.leer(configuration, tabla);
         int quantity = (Integer) spinQuantity.getValue();
         String product = cboProduct.getSelectedItem().toString();
-        if (quantity <=0){
+        if (quantity <= 0) {
             JOptionPane.showMessageDialog(
-                null,
-                "Intentas comprar 0 productos o cantidades negativas",
-                "ERROR",
-                JOptionPane.ERROR_MESSAGE
+                    null,
+                    "Intentas comprar 0 productos o cantidades negativas",
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE
             );
-        }else{
-        for (Map<String, Object> fila : datos) {
-            String products = fila.get("name").toString();
-            if (products.equals(product)) {
-                id = Integer.parseInt(fila.get("id").toString());
-                quantityProduct = Integer.parseInt(fila.get("quantity").toString());
-                if (quantity > quantityProduct) {
-                    JOptionPane.showMessageDialog(
-                        null,
-                        "Intentas comprar más productos de los disponibles",
-                        "ERROR",
-                        JOptionPane.ERROR_MESSAGE
-                    );
-                    canIbuy = false;
-                } else {
-                    canIbuy = true;
+        } else {
+            for (Map<String, Object> fila : datos) {
+                String products = fila.get("name").toString();
+                if (products.equals(product)) {
+                    id = Integer.parseInt(fila.get("id").toString());
+                    quantityProduct = Integer.parseInt(fila.get("quantity").toString());
+                    if (quantity > quantityProduct) {
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Intentas comprar más productos de los disponibles",
+                                "ERROR",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                        canIbuy = false;
+                    } else {
+                        canIbuy = true;
+                    }
+                    break;
                 }
-                break;
             }
-        }
         }
         if (canIbuy) {
             Map<String, Object> dato = new HashMap<>();
@@ -257,6 +270,54 @@ public class Sales extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_Buy
+
+    private void putPrice(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_putPrice
+        // TODO add your handling code here:
+        if (bloquearEventos) {
+            return;
+        }
+        List<Map<String, Object>> datos = bd.leer(configuration, tabla);
+        String product = cboProduct.getSelectedItem().toString();
+        for (Map<String, Object> fila : datos) {
+            String products = fila.get("name").toString();
+            if (products.equals(product)) {
+                String salePrice = fila.get("sale_price").toString();
+                lblUnitPrice.setText(salePrice);
+                break;
+            }
+        }
+    }//GEN-LAST:event_putPrice
+
+    private void TotalPrice(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_TotalPrice
+        // TODO add your handling code here:
+        if (bloquearEventos) {
+            return;
+        }
+
+        int cantidad = (Integer) spinQuantity.getValue();
+
+        if (cantidad <= 0) {
+            lblTotal.setText("0.0");
+        } else {
+            List<Map<String, Object>> datos = bd.leer(configuration, tabla);
+            String product = cboProduct.getSelectedItem().toString();
+
+            for (Map<String, Object> fila : datos) {
+                String products = fila.get("name").toString();
+
+                if (products.equals(product)) {
+
+                    double salePrice = Double.parseDouble(fila.get("sale_price").toString());
+
+                    double totalPrice = salePrice * cantidad;
+
+                    lblTotal.setText(String.valueOf(totalPrice));
+
+                    break;
+                }
+            }
+        }
+    }//GEN-LAST:event_TotalPrice
 
     /**
      * @param args the command line arguments
@@ -310,9 +371,9 @@ public class Sales extends javax.swing.JFrame {
     private javax.swing.JSpinner spinQuantity;
     // End of variables declaration//GEN-END:variables
 
-    String[] configuration = {"localhost","root","","pos_system"};
+    String[] configuration = {"localhost", "root", "", "pos_system"};
     MySQLGenerico bd = new MySQLGenerico();
     String[] camposProducts = {"quantity"};
     String tabla = "products";
-    
+
 }
